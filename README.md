@@ -1,1 +1,2 @@
-# secure-memory-handling-in-c-latex
+# Secure memory handling in C
+## LaTeX presentation
