@@ -47,22 +47,22 @@
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{semiverbatim}
-\uncover<1->{int copy\_string(const char *s) \{}
-\uncover<1->{char buffer[16];}
-\uncover<1->{  strcpy(buffer, s);}
-\uncover<1->{\}}
-\uncover<1->{}
-\uncover<1->{int main(void) \{}
-\uncover<1->{  char large\_string[128] = "Hello World!";}
-\uncover<1->{  \alert<2->{\only<2->{\color{green}}copy\_string(large\_string);} \visible<2->{\only<2->{\color{green} \textbf{//OK...}}}}
-\uncover<1->{\color{black}}
-\uncover<1->{  // Fill large string}
-\uncover<1->{  for(int i = 0; i < sizeof(large\_string)-1; ++i) \{}
-\uncover<1->{    large\_string[i] = 'a';}
-\uncover<1->{    large\_string[sizeof(large\_string)-1] = '\\0';}
-\uncover<1->{  \}}
-\uncover<1->{  \alert<3->{copy\_string(large\_string);} \visible<3->{\alert{\textbf{// Overflow...}}} }
-\uncover<1->{\}}
+int copy\_string(const char *s) \{
+  char buffer[16];
+  strcpy(buffer, s);
+\}
+
+int main(void) \{
+  char large\_string[128] = "Hello World!";
+  \alert<2->{\only<2->{\color{green}}copy\_string(large\_string);} \visible<2->{\only<2->{\color{green} \textbf{//OK...}}}
+\color{black}
+  // Fill large string
+  for(int i = 0; i < sizeof(large\_string)-1; ++i) \{
+    large\_string[i] = 'a';
+    large\_string[sizeof(large\_string)-1] = '\\0';
+  \}
+  \alert<3->{copy\_string(large\_string);} \visible<3->{\alert{\textbf{// Overflow...}}} 
+\}
 \end{semiverbatim}
 \end{column}
 \pause
@@ -269,7 +269,7 @@ int main(int argc, char *argv[]) \{
 \end{semiverbatim}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{C: Example 2}
 \tiny
 \begin{semiverbatim}
@@ -277,7 +277,7 @@ int main(int argc, char *argv[]) \{
 \#include <cstring>
 
 \greenalert{int copy\_string(char *dest, const char *src, size\_t len) \{} 
-  \\ // Magic copy \\
+  // Magic copy
   \greenalert{strncpy(dest, src, len - 1);}
   if (len > 0)
     dest[len - 1] = '\\0';
@@ -299,7 +299,7 @@ int main(int argc, char *argv[]) \{
 \end{semiverbatim}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{C: Example 3}
 \tiny
 \begin{semiverbatim}
@@ -307,7 +307,7 @@ int main(int argc, char *argv[]) \{
 \#include <cstring>
 
 \greenalert{int copy\_string(char *dest, const char *src, size\_t len) \{} 
-  \\ // Magic print \\
+  // Magic print
   \greenalert{return snprintf(dest, len, "\%s", src);}
 \}
 
@@ -359,7 +359,7 @@ int main(int argc, char *argv[]) \{
 \end{semiverbatim}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{C++: Example 4}
 \tiny
 \begin{semiverbatim}
@@ -396,19 +396,14 @@ int main(int argc, char *argv[]) \{
 \frametitle{\subsecname}
 \small
 GCC compiler parameters:
-\begin{itemize}[leftmargin=*]
-	\setlength\itemsep{0.3em}
+\begin{itemize}[leftmargin=*,parsep=2pt,itemsep=2pt]
 	\item \codeinline{-Wformat=\{1,2\} -Wformat-nonliteral -Wformat-overflow -Wformat-signedness -Wformat-y2k -Wformat-security -Wformat-nonliteral} \\
 	\visible<2->{Ex.: \codeinline{int my\_printf(struct MyContext *ctx, const char *fmt, ....) \_\_attribute\_\_((format (printf, 2, 3)));}}
-	\item \codeinline{-Wformat-truncation=\{1,2\}}
-	\item \codeinline{-Wstringop-overflow=\{1,2,3,4\}}
-	\item \codeinline{-Wstringop-truncation}
-	\item \codeinline{-Warray-bounds=\{1,2\}}
+	\item \codeinline{-Wformat-truncation=\{1,2\} -Wstringop-overflow=\{1,2,3,4\} -Wstringop-truncation -Warray-bounds=\{1,2\}}
 \end{itemize}
 
 GCC instrumentation options:
-\begin{itemize}[leftmargin=*]
-	\setlength\itemsep{0.3em}
+\begin{itemize}[leftmargin=*,parsep=2pt,itemsep=2pt]
 	\item \codeinline{-fstack-protector-\{all,strong,explicit,\}}
 	\item \codeinline{-fsanitize=address}
 	\item \codeinline{-fsanitize=undefined -fsanitize=null -fsanitize=bounds -fsanitize=bounds-strict}
